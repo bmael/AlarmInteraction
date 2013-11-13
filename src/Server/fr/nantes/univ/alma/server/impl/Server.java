@@ -14,11 +14,15 @@ import fr.nantes.univ.alma.common.remote.IServer;
  * @author Maël
  *
  */
-public class Server extends UnicastRemoteObject implements IServer {
+public class Server extends UnicastRemoteObject implements IServer, IAlarm {
 
+	private IHuman human;
+	
+	private boolean windOn;
+	
 	public Server() throws RemoteException {
 		super();
-		// TODO Auto-generated constructor stub
+		this.windOn = false;
 	}
 
 	/**
@@ -27,27 +31,37 @@ public class Server extends UnicastRemoteObject implements IServer {
 	private static final long serialVersionUID = -3738123347606957790L;
 
 	@Override
-	public void windOn(IAlarm alarm) throws RemoteException {
-		// TODO Auto-generated method stub
-
+	public void windOn() throws RemoteException {
+		this.windOn = true;
 	}
 
 	@Override
-	public void windOffAfterWakeUp(IAlarm alarm) throws RemoteException {
-		// TODO Auto-generated method stub
-
+	public void windOffAfterWakeUp() throws RemoteException {
+		this.windOn = false;
 	}
 
 	@Override
-	public void windOffAfterRing(IAlarm alarm) throws RemoteException {
-		// TODO Auto-generated method stub
-
+	public void windOffAfterRing() throws RemoteException {
+		this.windOn = false;
 	}
 
 	@Override
-	public void ringing(IHuman human) throws RemoteException {
+	public void ringing() throws RemoteException {
 		// TODO Auto-generated method stub
+		// Call the method ring from Human.
+	}
 
+	@Override
+	public boolean isWindOn() {
+		return this.windOn;
+	}
+	
+	/**
+	 * Set the human who use this alarm.
+	 * @param human the human who use this alarm.
+	 */
+	public void setHuman(IHuman human){
+		this.human = human;
 	}
 
 }

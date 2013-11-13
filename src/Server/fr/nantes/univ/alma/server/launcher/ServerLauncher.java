@@ -8,6 +8,7 @@ import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
 
 import fr.nantes.univ.alma.server.impl.Server;
+
 /**
  * This class provide the static void main method to launch the server.
  * @author bmael
