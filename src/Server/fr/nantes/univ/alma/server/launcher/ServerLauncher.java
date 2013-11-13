@@ -28,12 +28,12 @@ public class ServerLauncher {
 				System.out.println("-- Port already in use....");
 			}
 
-			Server nashor = new Server();
+			Server server = new Server();
 			
 			String url = "//" + InetAddress.getLocalHost().getHostAddress() + "/ploppy";
 			System.out.println("Storing the server with url: " + url);
 			
-			Naming.rebind(url, nashor);
+			Naming.rebind(url, server);
 			
 			System.out.println("Server is online");
 			
