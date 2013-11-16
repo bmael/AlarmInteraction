@@ -1,26 +1,24 @@
 /**
  * 
  */
-package fr.nantes.univ.alma.server.impl;
+package fr.nantes.univ.alma.alarm.impl;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Date;
 
 import fr.nantes.univ.alma.common.remote.IAlarm;
-import fr.nantes.univ.alma.common.remote.IHuman;
-import fr.nantes.univ.alma.common.remote.IServer;
 
 /**
  * @author Maël
  *
  */
-public class Server extends UnicastRemoteObject implements IServer, IAlarm {
-
-	private IHuman human;
+public class Alarm extends UnicastRemoteObject implements IAlarm {
 	
 	private boolean windOn;
+	private Date date;
 	
-	public Server() throws RemoteException {
+	public Alarm() throws RemoteException {
 		super();
 		this.windOn = false;
 	}
@@ -31,18 +29,24 @@ public class Server extends UnicastRemoteObject implements IServer, IAlarm {
 	private static final long serialVersionUID = -3738123347606957790L;
 
 	@Override
-	public void windOn() throws RemoteException {
+	public void windOn(Date d) throws RemoteException {
 		this.windOn = true;
+		this.date = d;
 	}
-
+	
+	private void windOff(){
+		this.windOn = false;
+		this.date = null;
+	}
+	
 	@Override
 	public void windOffAfterWakeUp() throws RemoteException {
-		this.windOn = false;
+		this.windOff();
 	}
 
 	@Override
 	public void windOffAfterRing() throws RemoteException {
-		this.windOn = false;
+		this.windOff();
 	}
 
 	@Override
@@ -55,13 +59,4 @@ public class Server extends UnicastRemoteObject implements IServer, IAlarm {
 	public boolean isWindOn() {
 		return this.windOn;
 	}
-	
-	/**
-	 * Set the human who use this alarm.
-	 * @param human the human who use this alarm.
-	 */
-	public void setHuman(IHuman human){
-		this.human = human;
-	}
-
 }

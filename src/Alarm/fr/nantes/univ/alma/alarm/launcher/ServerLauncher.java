@@ -1,13 +1,13 @@
 /**
  * 
  */
-package fr.nantes.univ.alma.server.launcher;
+package fr.nantes.univ.alma.alarm.launcher;
 
 import java.net.InetAddress;
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
 
-import fr.nantes.univ.alma.server.impl.Server;
+import fr.nantes.univ.alma.alarm.impl.Alarm;
 
 /**
  * This class provide the static void main method to launch the server.
@@ -29,12 +29,12 @@ public class ServerLauncher {
 				System.out.println("-- Port already in use....");
 			}
 
-			Server server = new Server();
+			Alarm alarm = new Alarm();
 			
 			String url = "//" + InetAddress.getLocalHost().getHostAddress() + "/ploppy";
 			System.out.println("Storing the server with url: " + url);
 			
-			Naming.rebind(url, server);
+			Naming.rebind(url, alarm);
 			
 			System.out.println("Server is online");
 			
