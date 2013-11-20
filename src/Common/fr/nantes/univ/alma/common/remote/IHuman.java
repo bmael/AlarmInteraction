@@ -52,4 +52,10 @@ public interface IHuman extends Remote {
 	 * @return true if the human is sleeping, false otherwise.
 	 */
 	public boolean isSleeping();
+	
+	/**
+	 * Return a boolean to indicate if human wind on or wind off the alarm.
+	 * @return true if human wind on the alarm, false otherwise.
+	 */
+	public boolean isAlarmWindOn();
 }
