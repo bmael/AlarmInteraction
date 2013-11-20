@@ -8,6 +8,7 @@ import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
 
 import fr.nantes.univ.alma.alarm.impl.Alarm;
+import fr.nantes.univ.alma.alarm.ui.MainWindow;
 
 /**
  * This class provide the static void main method to launch the server.
@@ -30,6 +31,9 @@ public class ServerLauncher {
 			}
 
 			Alarm alarm = new Alarm();
+			MainWindow frame = new MainWindow(alarm);
+			
+			alarm.addObserver(frame);
 			
 			String url = "//" + InetAddress.getLocalHost().getHostAddress() + "/ploppy";
 			System.out.println("Storing the server with url: " + url);

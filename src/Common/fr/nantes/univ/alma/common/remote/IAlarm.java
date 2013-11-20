@@ -4,6 +4,8 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Date;
 
+import sun.misc.REException;
+
 /**
  * This is the alarm interface.
  * @author bmael
@@ -39,9 +41,21 @@ public interface IAlarm extends Remote{
 	public void windOffAfterRing() throws RemoteException;
 	
 	/**
-	 * Advise the human that the alarm is ringing.
-	 * @param human the human to advise.
+	 * Return a boolean to indicate if this alarm is ringing.
+	 * @return true if this alarm is ringing, false otherwise.
+	 */
+	public boolean isRinging() throws RemoteException;
+	
+	/**
+	 * Make this alarm very noisy and boring.
 	 * @throws RemoteException
 	 */
 	public void ringing() throws RemoteException;
+	
+	/**
+	 * Stop the the ring from this alarm.
+	 * @throws RemoteException
+	 */
+	public void stopRinging() throws RemoteException;
+	
 }
