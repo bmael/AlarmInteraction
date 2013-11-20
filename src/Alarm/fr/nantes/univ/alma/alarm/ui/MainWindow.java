@@ -32,29 +32,25 @@ public class MainWindow extends JFrame implements Observer {
 	private static final long serialVersionUID = 7283810840315180224L;
 	private IAlarm alarmClock;
 	private DigitalClock digitalClock;
-	
+
 	private JPanel infoDisplayer;
 	private JLabel alarmLabel;
 	private JLabel ringingLabel;
-	
+
 	public MainWindow(IAlarm alarm){
-		
+
 		this.alarmClock = alarm;
 		this.digitalClock = new DigitalClock();
 		this.infoDisplayer = new JPanel();
-		
-		
-		this.setMinimumSize(new Dimension(225, 100));
-		this.setResizable(false);
-		
+
 		this.infoDisplayer.setLayout(new GridLayout(0,5));
-		
+
 		this.alarmLabel = new JLabel();
 		alarmLabel.setSize(25,25);
-		
+
 		this.ringingLabel = new JLabel();
 		ringingLabel.setSize(25,25);
-		
+
 		try {
 			this.updateWindOn(this.alarmClock.isWindOn());
 		} catch (RemoteException e) {
@@ -70,26 +66,28 @@ public class MainWindow extends JFrame implements Observer {
 
 		this.infoDisplayer.add(alarmLabel);
 		this.infoDisplayer.add(ringingLabel);
-		
-		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		
+
 		this.setLayout(new BorderLayout());
 		this.add(this.digitalClock, BorderLayout.CENTER);
 		this.add(this.infoDisplayer, BorderLayout.SOUTH);
-		
+
+		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		this.setMinimumSize(new Dimension(225, 100));
+		this.setResizable(false);
 		this.pack();
 		this.setVisible(true);
 	}
 
 	@Override
 	public void updateWindOn(boolean isWindOn) {
+		System.out.println("youpiiiiiiiiiiiiiiiiiiii");
 		if(isWindOn){
 			try {
 				BufferedImage imgWindOn = ImageIO.read(new File(System.getProperty("user.dir") + "/bin/UIRessources/alarm-clock.png"));
-				Image dimgWindOn = imgWindOn.getScaledInstance(alarmLabel.getWidth(), alarmLabel.getHeight(), Image.SCALE_SMOOTH);
+				Image dimgWindOn = imgWindOn.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
 				ImageIcon alarmIcon = new ImageIcon(dimgWindOn);
-		        
-		        this.alarmLabel.setIcon(alarmIcon); 
+
+				this.alarmLabel.setIcon(alarmIcon); 
 			} catch (IOException e) {
 				System.err.println("Couldn't find icons ressources...");
 				e.printStackTrace();
@@ -97,8 +95,9 @@ public class MainWindow extends JFrame implements Observer {
 		}
 		else {
 			ImageIcon alarmIcon = new ImageIcon();
-			this.alarmLabel.setIcon(alarmIcon);
+			this.alarmLabel.setIcon(null);
 		}
+		this.alarmLabel.revalidate();
 	}
 
 	@Override
@@ -106,10 +105,10 @@ public class MainWindow extends JFrame implements Observer {
 		if(isRinging){
 			try {
 				BufferedImage imgRinging = ImageIO.read(new File(System.getProperty("user.dir") + "/bin/UIRessources/alarm-ringing.png"));
-		        Image dimgRinging = imgRinging.getScaledInstance(ringingLabel.getWidth(), ringingLabel.getHeight(), Image.SCALE_SMOOTH);
-		        ImageIcon ringingIcon = new ImageIcon(dimgRinging);
-		        
-		        this.ringingLabel.setIcon(ringingIcon); 
+				Image dimgRinging = imgRinging.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+				ImageIcon ringingIcon = new ImageIcon(dimgRinging);
+
+				this.ringingLabel.setIcon(ringingIcon); 
 			} catch (IOException e) {
 				System.err.println("Couldn't find icons ressources...");
 				e.printStackTrace();
@@ -117,7 +116,8 @@ public class MainWindow extends JFrame implements Observer {
 		}
 		else {
 			ImageIcon ringingIcon = new ImageIcon();
-			this.alarmLabel.setIcon(ringingIcon);
+			this.ringingLabel.setIcon(null);
 		}
+		this.ringingLabel.revalidate();
 	}
 }
