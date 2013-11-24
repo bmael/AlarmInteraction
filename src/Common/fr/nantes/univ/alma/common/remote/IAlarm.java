@@ -58,4 +58,11 @@ public interface IAlarm extends Remote{
 	 */
 	public void stopRinging() throws RemoteException;
 	
+	/**
+	 * Returns the ringing date if it set, null otherwise.
+	 * @return the ringing date if it set, null otherwise.
+	 * @throws RemoteException
+	 */
+	public Date getRingingDate() throws RemoteException;
+	
 }
