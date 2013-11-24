@@ -135,15 +135,17 @@ public class MainWindow extends JFrame implements Observer {
 	public void updateSleep(boolean isSleeping) {
 		if (isSleeping){
 			this.isSleepingLabel.setText("Sleep");
-			this.wakeUpButton.setEnabled(true);
+//			this.wakeUpButton.setEnabled(true);
 			this.sleepButton.setEnabled(false);
 			this.getTimeButton.setEnabled(false);
 		} 
 		else {
 			this.isSleepingLabel.setText("Wake Up");
-			this.wakeUpButton.setEnabled(false);
+//			this.wakeUpButton.setEnabled(false);
 			this.sleepButton.setEnabled(true);
 		}
+		
+		this.wakeUpButton.setEnabled(!this.sleepButton.isEnabled());
 	}
 
 	@Override
@@ -151,13 +153,15 @@ public class MainWindow extends JFrame implements Observer {
 		if(isWindOn){
 			this.isWindOnLabel.setText("Wind On");
 			this.windOnButton.setEnabled(false);
-			this.windOffButton.setEnabled(true);
+//			this.windOffButton.setEnabled(true);
 		}
 		else {
 			this.isWindOnLabel.setText("Wind Off");
 			this.windOnButton.setEnabled(true);
-			this.windOffButton.setEnabled(false);
+//			this.windOffButton.setEnabled(false);
 		}
+		
+		this.windOffButton.setEnabled(!this.windOnButton.isEnabled());
 	}
 	
 }
