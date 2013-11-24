@@ -21,7 +21,7 @@ public class TimeSelectionDialogPanel {
 		JPanel res = new JPanel();
 		
 		JSpinner timeSpinner = new JSpinner( new SpinnerDateModel() );
-		JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(timeSpinner, " dd MMMM yyyy HH:mm");
+		JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(timeSpinner, "dd MMMM yyyy HH:mm");
 		
 		timeSpinner.setEditor(timeEditor);
 		timeSpinner.setValue(ringingdate); // will only show the current time
