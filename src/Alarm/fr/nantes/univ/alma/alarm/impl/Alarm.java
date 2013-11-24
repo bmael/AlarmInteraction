@@ -44,8 +44,23 @@ public class Alarm extends UnicastRemoteObject implements IAlarm, Observable {
 		this.windOn = false;
 		this.ringing = false;
 		this.date = null;
+	}
+	
+	private void windOff(){		
+		this.windOn = false;
+		this.date = null;
+
+		this.updateWindOnObserver();
+	}
+	
+	private void reLaunch(){
+		this.date.setTime(this.date.getTime() + 60000); //ring 1 minute later
 		
 		timer = new TimerThread(this);
+		timer.start();
+		
+		this.updateWindOnObserver();
+		
 	}
 
 	@Override
@@ -53,16 +68,10 @@ public class Alarm extends UnicastRemoteObject implements IAlarm, Observable {
 		this.windOn = true;
 		this.date = d;
 
+		timer = new TimerThread(this);
 		timer.start();
 		
 		this.updateWindOnObserver();;
-	}
-
-	private void windOff(){		
-		this.windOn = false;
-		this.date = null;
-
-		this.updateWindOnObserver();
 	}
 
 	@Override
@@ -85,7 +94,11 @@ public class Alarm extends UnicastRemoteObject implements IAlarm, Observable {
 			Clip clip = AudioSystem.getClip();
 			AudioInputStream inputStream = AudioSystem.getAudioInputStream(new File(System.getProperty("user.dir") + "/bin/UIRessources/ring.wav"));
 			clip.open(inputStream);
-	        clip.start(); 
+	        clip.start();
+	        
+	        while(clip.getMicrosecondLength()!= clip.getMicrosecondPosition()){}
+	        this.stopRinging();
+	        
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
@@ -94,7 +107,9 @@ public class Alarm extends UnicastRemoteObject implements IAlarm, Observable {
 	@Override
 	public void stopRinging() throws RemoteException {
 		this.ringing = false;
-		this.updateWindOnObserver();
+		this.updateRingingObserver();
+		
+		this.reLaunch();
 	}
 
 	@Override
@@ -132,7 +147,7 @@ public class Alarm extends UnicastRemoteObject implements IAlarm, Observable {
 	@Override
 	public void updateRingingObserver() {
 		for(Observer obs : this.observers){
-			obs.updateRinging(this.windOn);
+			obs.updateRinging(this.ringing);
 		}
 	}
 }
