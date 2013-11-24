@@ -24,16 +24,17 @@ public class Alarm extends UnicastRemoteObject implements IAlarm, Observable {
 	
 	private ArrayList<Observer> observers = new ArrayList<>();
 	
-	public Alarm() throws RemoteException {
-		super();
-		this.windOn = false;
-		this.ringing = false;
-	}
-
 	/**
 	 * The generated serial version UID.
 	 */
 	private static final long serialVersionUID = -3738123347606957790L;
+	
+	public Alarm() throws RemoteException {
+		super();
+		this.windOn = false;
+		this.ringing = false;
+		this.date = null;
+	}
 
 	@Override
 	public void windOn(Date d) throws RemoteException {
@@ -81,6 +82,11 @@ public class Alarm extends UnicastRemoteObject implements IAlarm, Observable {
 	@Override
 	public boolean isRinging() throws RemoteException {
 		return this.ringing;
+	}
+	
+	@Override
+	public Date getRingingDate() throws RemoteException {
+		return this.date;
 	}
 
 	@Override

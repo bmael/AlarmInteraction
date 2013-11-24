@@ -88,6 +88,7 @@ public class MainWindow extends JFrame implements Observer {
 				ImageIcon alarmIcon = new ImageIcon(dimgWindOn);
 
 				this.alarmLabel.setIcon(alarmIcon); 
+				this.alarmLabel.setToolTipText("Will ring at: " + this.alarmClock.getRingingDate());
 			} catch (IOException e) {
 				System.err.println("Couldn't find icons ressources...");
 				e.printStackTrace();
@@ -96,6 +97,7 @@ public class MainWindow extends JFrame implements Observer {
 		else {
 			ImageIcon alarmIcon = new ImageIcon();
 			this.alarmLabel.setIcon(null);
+			this.alarmLabel.setToolTipText("");
 		}
 		this.alarmLabel.revalidate();
 	}
