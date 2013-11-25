@@ -54,6 +54,7 @@ public class Alarm extends UnicastRemoteObject implements IAlarm, Observable {
 	}
 	
 	private void reLaunch(){
+		this.date = new Date();
 		this.date.setTime(this.date.getTime() + 60000); //ring 1 minute later
 		
 		timer = new TimerThread(this);
@@ -88,6 +89,7 @@ public class Alarm extends UnicastRemoteObject implements IAlarm, Observable {
 	public void ringing() throws RemoteException {
 		this.timer.stopTimer();
 		this.ringing = true;
+		
 		this.updateRingingObserver();	
 		
 		try {
