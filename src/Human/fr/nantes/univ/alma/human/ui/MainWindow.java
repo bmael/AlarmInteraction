@@ -5,6 +5,7 @@ package fr.nantes.univ.alma.human.ui;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.rmi.RemoteException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -122,8 +123,14 @@ public class MainWindow extends JFrame implements Observer {
 		this.tabbedPane.addTab("Actions", null, this.actionPanel, "Display all available actions for the human.");
 		
 		/* Synchronize this frame with the current human state */
-		this.updateSleep(this.human.isSleeping());
-		this.updateWindOn(this.human.isAlarmWindOn());
+		try {
+			this.updateSleep(this.human.isSleeping());
+			this.updateWindOn(this.human.isAlarmWindOn());
+			this.updateZombie(this.human.isZombie());
+		} catch (RemoteException e) {
+			System.err.println("Unable to synchronize this human with the alarm clock...");
+			e.printStackTrace();
+		}
 		
 		this.add(this.tabbedPane);
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -135,33 +142,49 @@ public class MainWindow extends JFrame implements Observer {
 	public void updateSleep(boolean isSleeping) {
 		if (isSleeping){
 			this.isSleepingLabel.setText("Sleep");
-//			this.wakeUpButton.setEnabled(true);
 			this.sleepButton.setEnabled(false);
+			this.wakeUpButton.setEnabled(true);
+			this.windOnButton.setEnabled(false);
+			this.windOffButton.setEnabled(false);
 			this.getTimeButton.setEnabled(false);
 		} 
 		else {
 			this.isSleepingLabel.setText("Wake Up");
-//			this.wakeUpButton.setEnabled(false);
-			this.sleepButton.setEnabled(true);
+			this.windOnButton.setEnabled(true);
+			this.windOffButton.setEnabled(false);
+			this.wakeUpButton.setEnabled(false);
 		}
 		
-		this.wakeUpButton.setEnabled(!this.sleepButton.isEnabled());
+		
 	}
 
 	@Override
 	public void updateWindOn(boolean isWindOn) {
 		if(isWindOn){
 			this.isWindOnLabel.setText("Wind On");
-			this.windOnButton.setEnabled(false);
-//			this.windOffButton.setEnabled(true);
+			this.windOnButton.setEnabled(false);			
 		}
 		else {
 			this.isWindOnLabel.setText("Wind Off");
 			this.windOnButton.setEnabled(true);
-//			this.windOffButton.setEnabled(false);
+			this.windOffButton.setEnabled(false);
+			this.sleepButton.setEnabled(false);
+			this.wakeUpButton.setEnabled(false);
 		}
-		
-		this.windOffButton.setEnabled(!this.windOnButton.isEnabled());
+	}
+
+	@Override
+	public void updateZombie(boolean zombie) {
+		if(zombie){
+			this.isSleepingLabel.setText("Zombie");
+			this.sleepButton.setEnabled(true);
+			this.wakeUpButton.setEnabled(false);
+			this.windOffButton.setEnabled(true);
+			this.windOnButton.setEnabled(false);
+		}
+		else{
+			this.sleepButton.setEnabled(false);
+		}
 	}
 	
 }

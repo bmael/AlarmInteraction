@@ -19,9 +19,11 @@ import fr.nantes.univ.alma.human.observer.Observer;
 public class Human implements IHuman, Observable {
 
 	private boolean sleeping = false;
+	private boolean zombie = false;
 	private boolean windOn;
-	
+
 	private IAlarm alarm;
+	private Listen4RingThread ringListener;
 	private ArrayList<Observer> observers = new ArrayList<>();
 
 	public Human(IAlarm alarm) throws RemoteException{
@@ -35,21 +37,31 @@ public class Human implements IHuman, Observable {
 	@Override
 	public void windOn(Date d) throws RemoteException {
 		this.windOn = true;
-		this.updateWindOnObserver();
-		
 		this.alarm.windOn(d);
+		
+		this.ringListener = new Listen4RingThread(this.alarm, this);
+		this.ringListener.start();
+		
+		this.updateWindOnObserver();
 	}
 
 	/* (non-Javadoc)
 	 * @see fr.nantes.univ.alma.common.remote.IHuman#windOff()
 	 */
 	@Override
-	public void windOff() throws RemoteException {
-		// TODO: We have to do a test if the human is waking up cause a ring to call the right alarm method.
+	public void windOff(boolean withAlarm) throws RemoteException {
 		this.windOn = false;
 		this.updateWindOnObserver();
-		
-		this.alarm.windOffAfterWakeUp();
+
+		if(withAlarm){
+			this.alarm.windOffAfterRing();
+		}
+		else{
+			this.alarm.windOffAfterWakeUp();
+		}
+
+		this.zombie = false;
+		this.updateZombieObserver();
 	}
 
 	/* (non-Javadoc)
@@ -59,6 +71,13 @@ public class Human implements IHuman, Observable {
 	public void wakeUp() throws RemoteException {
 		this.sleeping = false;
 		this.updateSleepObserver();
+		
+		if(this.ringListener != null){
+			this.ringListener.stopListen();
+		}
+
+		this.zombie = false;
+		this.updateZombieObserver();
 	}
 
 	/* (non-Javadoc)
@@ -68,8 +87,17 @@ public class Human implements IHuman, Observable {
 	public void sleep() throws RemoteException {
 		this.sleeping = true;
 		this.updateSleepObserver();
+		
+//		this.zombie = false;
+//		this.updateZombieObserver();
 	}
 
+	@Override
+	public void zombie() throws RemoteException {
+		this.zombie = true;
+		this.updateZombieObserver();
+	}
+	
 	/* (non-Javadoc)
 	 * @see fr.nantes.univ.alma.common.remote.IHuman#getTime()
 	 */
@@ -86,11 +114,16 @@ public class Human implements IHuman, Observable {
 	public boolean isSleeping() {
 		return this.sleeping;
 	}
-	
+
 
 	@Override
 	public boolean isAlarmWindOn() {
 		return this.windOn;
+	}
+
+	@Override
+	public boolean isZombie() throws RemoteException {
+		return this.zombie;
 	}
 
 	@Override
@@ -104,16 +137,23 @@ public class Human implements IHuman, Observable {
 			obs.updateSleep(this.sleeping);
 		}
 	}
-
-	@Override
-	public void delObserver() {
-		this.observers = new ArrayList<>();
-	}
-
+	
 	@Override
 	public void updateWindOnObserver() {
 		for(Observer obs : this.observers){
-			obs.updateWindOn(this.windOn);
+			obs.updateSleep(this.windOn);
 		}
+	}
+
+	@Override
+	public void updateZombieObserver() {
+		for(Observer obs : this.observers){
+			obs.updateZombie(this.zombie);
+		}
+	}
+	
+	@Override
+	public void delObserver() {
+		this.observers = new ArrayList<>();
 	}
 }

@@ -25,7 +25,8 @@ public class WindOffActionListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		try {
-			this.human.windOff();
+			this.human.windOff(this.human.isZombie());
+			this.human.wakeUp();
 		} catch (RemoteException e1) {
 			System.err.println("Unable to wind off the alarm... Sentenced to rung");
 			e1.printStackTrace();

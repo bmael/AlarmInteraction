@@ -27,6 +27,7 @@ public class WakeUpActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		try {
 			this.human.wakeUp();
+			this.human.windOff(false);
 		} catch (RemoteException e1) {
 			System.err.println("Unable to wake up the human... He makes a beautifull dream!");
 			e1.printStackTrace();
