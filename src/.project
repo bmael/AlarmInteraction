@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>UIRessources</name>
+			<type>2</type>
+			<location>F:/Dev/Projet/AlarmInteraction/src/Alarm/UIRessources</location>
+		</link>
+	</linkedResources>
 </projectDescription>
