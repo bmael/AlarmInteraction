@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="Common"/>
+	<classpathentry kind="src" path="UIRessources"/>
+	<classpathentry kind="src" path="ConsoleLauncher"/>
+	<classpathentry kind="src" path="Alarm"/>
+	<classpathentry kind="src" path="Human"/>
+	<classpathentry kind="src" path="Tools"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
