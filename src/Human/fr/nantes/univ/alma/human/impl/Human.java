@@ -141,7 +141,7 @@ public class Human implements IHuman, Observable {
 	@Override
 	public void updateWindOnObserver() {
 		for(Observer obs : this.observers){
-			obs.updateSleep(this.windOn);
+			obs.updateWindOn(this.windOn);
 		}
 	}
 
