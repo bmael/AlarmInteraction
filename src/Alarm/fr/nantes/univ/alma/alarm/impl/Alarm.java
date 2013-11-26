@@ -9,6 +9,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Random;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -31,6 +32,7 @@ public class Alarm extends UnicastRemoteObject implements IAlarm, Observable {
 	private Date date;
 
 	private TimerThread timer;
+	private Clip ringtone;
 
 	private ArrayList<Observer> observers = new ArrayList<>();
 
@@ -45,23 +47,29 @@ public class Alarm extends UnicastRemoteObject implements IAlarm, Observable {
 		this.ringing = false;
 		this.date = null;
 	}
-	
-	private void windOff(){		
+
+	private void windOff(){	
+		System.out.println("[INFO] Now we can start the communication...");
+
 		this.windOn = false;
 		this.date = null;
+		
+		if(this.timer != null){
+			this.timer.stopTimer();
+		}
 
 		this.updateWindOnObserver();
 	}
-	
+
 	private void reLaunch(){
 		this.date = new Date();
 		this.date.setTime(this.date.getTime() + 60000); //ring 1 minute later
-		
+
 		timer = new TimerThread(this);
 		timer.start();
-		
+
 		this.updateWindOnObserver();
-		
+
 	}
 
 	@Override
@@ -71,7 +79,7 @@ public class Alarm extends UnicastRemoteObject implements IAlarm, Observable {
 
 		timer = new TimerThread(this);
 		timer.start();
-		
+
 		this.updateWindOnObserver();;
 	}
 
@@ -83,24 +91,28 @@ public class Alarm extends UnicastRemoteObject implements IAlarm, Observable {
 	@Override
 	public void windOffAfterRing() throws RemoteException {
 		this.windOff();
+		this.stopRinging();
 	}
 
 	@Override
-	public void ringing() throws RemoteException {
-		this.timer.stopTimer();
+	public void ringing() throws RemoteException {			
+
+		if(this.timer!=null){
+			this.timer.stopTimer();
+		}
+		
 		this.ringing = true;
-		
 		this.updateRingingObserver();	
-		
+
 		try {
-			Clip clip = AudioSystem.getClip();
+			this.ringtone = AudioSystem.getClip();
 			AudioInputStream inputStream = AudioSystem.getAudioInputStream(new File(System.getProperty("user.dir") + "/bin/UIRessources/ring.wav"));
-			clip.open(inputStream);
-	        clip.start();
-	        
-	        while(clip.getMicrosecondLength()!= clip.getMicrosecondPosition()){}
-	        this.stopRinging();
-	        
+			this.ringtone.open(inputStream);
+			this.ringtone.start();
+
+			while(this.ringtone.getMicrosecondLength()!= this.ringtone.getMicrosecondPosition()){}
+			this.stopRinging();
+
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
@@ -109,9 +121,16 @@ public class Alarm extends UnicastRemoteObject implements IAlarm, Observable {
 	@Override
 	public void stopRinging() throws RemoteException {
 		this.ringing = false;
+
+		if(this.ringtone != null){
+			this.ringtone.stop();
+		}
+		
 		this.updateRingingObserver();
 		
-		this.reLaunch();
+		if(this.windOn){
+			this.reLaunch();
+		}
 	}
 
 	@Override

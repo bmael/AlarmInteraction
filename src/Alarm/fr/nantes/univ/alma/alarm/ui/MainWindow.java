@@ -80,7 +80,6 @@ public class MainWindow extends JFrame implements Observer {
 
 	@Override
 	public void updateWindOn(boolean isWindOn) {
-		System.out.println("youpiiiiiiiiiiiiiiiiiiii");
 		if(isWindOn){
 			try {
 				BufferedImage imgWindOn = ImageIO.read(new File(System.getProperty("user.dir") + "/bin/UIRessources/alarm-clock.png"));

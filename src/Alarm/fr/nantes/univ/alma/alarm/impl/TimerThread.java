@@ -28,13 +28,18 @@ public class TimerThread extends Thread {
 			try {
 				Date current = new Date();
 				SimpleDateFormat format = new SimpleDateFormat("dd MMMM yyyy HH:mm");
-				if(this.alarm.getRingingDate() != null){
-					if(format.format(this.alarm.getRingingDate()).equals(format.format(current))){
-						System.out.println("DRINNNNNNNNNNNNNNGGGGGGGGGGGGGGGGGG!!!!!!!!!!!!!!");
-						this.alarm.ringing();
+				if(this.alarm.isWindOn()){
+					if(this.alarm.getRingingDate() != null){
+						if(format.format(this.alarm.getRingingDate()).equals(format.format(current))){
+							System.out.println("[INFO] DRINNNNNNNNNNNNNNGGGGGGGGGGGGGGGGGG!!!!!!!!!!!!!!");
+							this.alarm.ringing();
+						}
 					}
 				}
-			} catch (RemoteException e) {
+				else{
+					this.stopTimer();
+				}
+			}catch (RemoteException e) {
 				System.err.println("Unable to get the ringing date... Enjoy your alarm never ring!");
 				e.printStackTrace();
 			}
