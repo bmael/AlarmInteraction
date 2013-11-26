@@ -49,8 +49,6 @@ public class Alarm extends UnicastRemoteObject implements IAlarm, Observable {
 	}
 
 	private void windOff(){	
-		System.out.println("[INFO] Now we can start the communication...");
-
 		this.windOn = false;
 		this.date = null;
 		
