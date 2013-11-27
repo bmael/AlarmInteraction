@@ -74,13 +74,14 @@ public class MainWindow extends JFrame implements Observer {
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		this.setMinimumSize(new Dimension(225, 100));
 		this.setResizable(false);
+		this.setLocationRelativeTo(null);
+		
 		this.pack();
 		this.setVisible(true);
 	}
 
 	@Override
 	public void updateWindOn(boolean isWindOn) {
-		System.out.println("youpiiiiiiiiiiiiiiiiiiii");
 		if(isWindOn){
 			try {
 				BufferedImage imgWindOn = ImageIO.read(new File(System.getProperty("user.dir") + "/bin/UIRessources/alarm-clock.png"));
@@ -95,7 +96,6 @@ public class MainWindow extends JFrame implements Observer {
 			}
 		}
 		else {
-			ImageIcon alarmIcon = new ImageIcon();
 			this.alarmLabel.setIcon(null);
 			this.alarmLabel.setToolTipText("");
 		}
@@ -117,7 +117,6 @@ public class MainWindow extends JFrame implements Observer {
 			}
 		}
 		else {
-			ImageIcon ringingIcon = new ImageIcon();
 			this.ringingLabel.setIcon(null);
 		}
 		this.ringingLabel.revalidate();

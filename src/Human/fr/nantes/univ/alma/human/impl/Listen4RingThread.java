@@ -13,11 +13,11 @@ import fr.nantes.univ.alma.common.remote.IHuman;
  *
  */
 public class Listen4RingThread extends Thread {
-	
+
 	private boolean stop = false;
 	private IAlarm alarm;
 	private IHuman human;
-	
+
 	/**
 	 * Initialize a new instance of a thread to listen for the alarm ringing.
 	 * @param alarm
@@ -29,10 +29,14 @@ public class Listen4RingThread extends Thread {
 	}
 
 	public void run(){
+		System.out.println("[INFO] Listen4Ring thread start now.");
 		while(!stop){
 			try {
 				if(this.alarm.isRinging()){
+					//this.human.waitForTransmission();
 					this.human.zombie();
+					System.out.println("[INFO] Stopping Listen4Ring thread");
+					this.stopListen();
 				}
 			} catch (RemoteException e) {
 				System.err.println("Unable to listen the alarm... May be it is ringing, may be not...");
@@ -45,10 +49,11 @@ public class Listen4RingThread extends Thread {
 				e.printStackTrace();
 			}
 		}
+		System.out.println("[INFO] Listen4Ring thread is stopped.");
 	}
-	
+
 	public void stopListen(){
 		this.stop = true;
 	}
-	
+
 }

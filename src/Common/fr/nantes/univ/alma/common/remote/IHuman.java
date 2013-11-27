@@ -74,4 +74,5 @@ public interface IHuman extends Remote {
 	 * @throws RemoteException
 	 */
 	public boolean isZombie() throws RemoteException;
+	
 }
