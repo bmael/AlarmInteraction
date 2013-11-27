@@ -4,8 +4,6 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Date;
 
-import sun.misc.REException;
-
 /**
  * This is the alarm interface.
  * @author bmael
